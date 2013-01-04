@@ -26,6 +26,11 @@ import xbmcgui
 import xbmcaddon
 import subprocess
 
+script_xbmc_starts = ''
+script_player_starts = ''
+script_player_stops = ''
+script_screensaver_starts = ''
+script_screensaver_stops = ''
 
 __addon__        = xbmcaddon.Addon()
 __addonversion__ = __addon__.getAddonInfo('version')
@@ -36,14 +41,14 @@ def log(txt):
     message = '%s: %s' % (__addonname__, txt.encode('ascii', 'ignore'))
     xbmc.log(msg=message, level=xbmc.LOGDEBUG)
 
-
 class Main:
   def __init__(self):
     self._init_vars()
     self._init_property()
-    if self.script_xbmc_starts:
-      log('Going to execute script = "' + self.script_xbmc_starts + '"')
-      #subprocess.Popen([self.script_xbmc_starts])
+    global script_xbmc_starts
+    if script_xbmc_starts:
+      log('Going to execute script = "' + script_xbmc_starts + '"')
+      subprocess.Popen([script_xbmc_starts])
     self._daemon()
 
   def _init_vars(self):
@@ -52,16 +57,21 @@ class Main:
 
   def _init_property(self):
     log('Reading properties')
-    self.script_xbmc_starts = xbmc.translatePath(__addon__.getSetting("xbmc_starts"))
-    self.script_player_starts = xbmc.translatePath(__addon__.getSetting("player_starts"))
-    self.script_player_stops = xbmc.translatePath(__addon__.getSetting("player_stops"))
-    self.script_screensaver_starts = xbmc.translatePath(__addon__.getSetting("screensaver_starts"))
-    self.script_screensaver_stops = xbmc.translatePath(__addon__.getSetting("screensaver_stops"))
-    log('script xbmc starts = "' + self.script_xbmc_starts + '"')
-    log('script player starts = "' + self.script_player_starts + '"')
-    log('script player stops = "' + self.script_player_stops + '"')
-    log('script screensaver starts = "' + self.script_screensaver_starts + '"')
-    log('script screensaver stops = "' + self.script_screensaver_stops + '"')
+    global script_xbmc_starts
+    global script_player_starts
+    global script_player_stops
+    global script_screensaver_starts
+    global script_screensaver_stops
+    script_xbmc_starts = xbmc.translatePath(__addon__.getSetting("xbmc_starts"))
+    script_player_starts = xbmc.translatePath(__addon__.getSetting("player_starts"))
+    script_player_stops = xbmc.translatePath(__addon__.getSetting("player_stops"))
+    script_screensaver_starts = xbmc.translatePath(__addon__.getSetting("screensaver_starts"))
+    script_screensaver_stops = xbmc.translatePath(__addon__.getSetting("screensaver_stops"))
+    log('script xbmc starts = "' + script_xbmc_starts + '"')
+    log('script player starts = "' + script_player_starts + '"')
+    log('script player stops = "' + script_player_stops + '"')
+    log('script screensaver starts = "' + script_screensaver_starts + '"')
+    log('script screensaver stops = "' + script_screensaver_stops + '"')
 
   def _daemon(self):
     while (not xbmc.abortRequested):
@@ -80,15 +90,17 @@ class MyMonitor(xbmc.Monitor):
 
   def onScreensaverActivated(self):
     log('screensaver starts')
-    if self.script_screensaver_starts:
-      log('Going to execute script = "' + self.script_screensaver_starts + '"')
-      #subprocess.Popen([self.script_screensaver_starts])
+    global script_screensaver_starts
+    if script_screensaver_starts:
+      log('Going to execute script = "' + script_screensaver_starts + '"')
+      subprocess.Popen([script_screensaver_starts])
 
   def onScreensaverDeactivated(self):
     log('screensaver stops')
-    if self.script_screensaver_stops:
-      log('Going to execute script = "' + self.script_screensaver_stops + '"')
-      #subprocess.Popen([self.script_screensaver_stops])
+    global script_screensaver_stops
+    if script_screensaver_stops:
+      log('Going to execute script = "' + script_screensaver_stops + '"')
+      subprocess.Popen([script_screensaver_stops])
 
 class MyPlayer(xbmc.Player):
   def __init__(self):
@@ -96,18 +108,20 @@ class MyPlayer(xbmc.Player):
 
   def onPlayBackStarted(self):
     log('player starts')
-    if self.script_player_starts:
-      log('Going to execute script = "' + self.script_player_starts + '"')
-      #subprocess.Popen([self.script_player_starts])
+    global script_player_starts
+    if script_player_starts:
+      log('Going to execute script = "' + script_player_starts + '"')
+      subprocess.Popen([script_player_starts])
 
   def onPlayBackEnded(self):
     self.onPlayBackStopped()
 
   def onPlayBackStopped(self):
     log('player stops')
-    if self.script_player_stops:
-      log('Going to execute script = "' + self.script_player_stops + '"')
-      #subprocess.Popen([self.script_player_stops])
+    global script_player_stops
+    if script_player_stops:
+      log('Going to execute script = "' + script_player_stops + '"')
+      subprocess.Popen([script_player_stops])
 
 if (__name__ == "__main__"):
     log('script version %s started' % __addonversion__)
