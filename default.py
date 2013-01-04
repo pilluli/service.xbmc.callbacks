@@ -24,10 +24,8 @@ import sys
 import xbmc
 import xbmcgui
 import xbmcaddon
-import random
-import datetime
-import _strptime
-import urllib
+import subprocess
+
 
 __addon__        = xbmcaddon.Addon()
 __addonversion__ = __addon__.getAddonInfo('version')
@@ -43,6 +41,9 @@ class Main:
   def __init__(self):
     self._init_vars()
     self._init_property()
+    if self.script_xbmc_starts:
+      log('Going to execute script = "' + self.script_xbmc_starts + '"')
+      #subprocess.Popen([self.script_xbmc_starts])
     self._daemon()
 
   def _init_vars(self):
@@ -51,12 +52,12 @@ class Main:
 
   def _init_property(self):
     log('Reading properties')
-    self.script_player_starts = __addon__.getSetting("player_starts")
-    self.script_player_stops = __addon__.getSetting("player_stops")
-    self.script_screensaver_starts = __addon__.getSetting("screensaver_starts")
-    self.script_screensaver_stops = __addon__.getSetting("screensaver_stops")
-    #self.script_xbmc_starts = __addon__.getSetting("xbmc_starts")
-    #self.script_xbmc_stops = __addon__.getSetting("xbmc_stops")
+    self.script_xbmc_starts = xbmc.translatePath(__addon__.getSetting("xbmc_starts"))
+    self.script_player_starts = xbmc.translatePath(__addon__.getSetting("player_starts"))
+    self.script_player_stops = xbmc.translatePath(__addon__.getSetting("player_stops"))
+    self.script_screensaver_starts = xbmc.translatePath(__addon__.getSetting("screensaver_starts"))
+    self.script_screensaver_stops = xbmc.translatePath(__addon__.getSetting("screensaver_stops"))
+    log('script xbmc starts = "' + self.script_xbmc_starts + '"')
     log('script player starts = "' + self.script_player_starts + '"')
     log('script player stops = "' + self.script_player_stops + '"')
     log('script screensaver starts = "' + self.script_screensaver_starts + '"')
@@ -73,30 +74,40 @@ class MyMonitor(xbmc.Monitor):
   def __init__(self, *args, **kwargs):
     xbmc.Monitor.__init__(self)
     self.update_settings = kwargs['update_settings']
-    log('init monitor')
 
   def onSettingsChanged(self):
     self.update_settings()
 
   def onScreensaverActivated(self):
-    log('callback: monitor screensaver Activated')
+    log('screensaver starts')
+    if self.script_screensaver_starts:
+      log('Going to execute script = "' + self.script_screensaver_starts + '"')
+      #subprocess.Popen([self.script_screensaver_starts])
 
   def onScreensaverDeactivated(self):
-    log('callback: monitor screensaver DEactivated')
+    log('screensaver stops')
+    if self.script_screensaver_stops:
+      log('Going to execute script = "' + self.script_screensaver_stops + '"')
+      #subprocess.Popen([self.script_screensaver_stops])
 
 class MyPlayer(xbmc.Player):
   def __init__(self):
     xbmc.Player.__init__(self)
-    log('init player')
 
   def onPlayBackStarted(self):
-    log('callback: player started')
+    log('player starts')
+    if self.script_player_starts:
+      log('Going to execute script = "' + self.script_player_starts + '"')
+      #subprocess.Popen([self.script_player_starts])
 
   def onPlayBackEnded(self):
     self.onPlayBackStopped()
 
   def onPlayBackStopped(self):
-    log('callback: player stopped')
+    log('player stops')
+    if self.script_player_stops:
+      log('Going to execute script = "' + self.script_player_stops + '"')
+      #subprocess.Popen([self.script_player_stops])
 
 if (__name__ == "__main__"):
     log('script version %s started' % __addonversion__)

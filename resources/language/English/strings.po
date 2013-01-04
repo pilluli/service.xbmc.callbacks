@@ -22,18 +22,26 @@ msgid "Scripts to execute when:"
 msgstr ""
 
 msgctxt "#32010"
-msgid "Player starts"
+msgid "XBMC starts"
 msgstr ""
 
 msgctxt "#32011"
-msgid "Player stops"
+msgid "XBMC quits"
 msgstr ""
 
 msgctxt "#32012"
-msgid "Screensaver starts"
+msgid "Player starts"
 msgstr ""
 
 msgctxt "#32013"
+msgid "Player stops"
+msgstr ""
+
+msgctxt "#32014"
+msgid "Screensaver starts"
+msgstr ""
+
+msgctxt "#32015"
 msgid "Screensaver stops"
 msgstr ""
 
