@@ -47,24 +47,36 @@ class Main:
 
   def _init_vars(self):
     self.Player = MyPlayer()
-    self.Monitor = MyMonitor()
+    self.Monitor = MyMonitor(update_settings = self._init_property)
 
   def _init_property(self):
-    #self.RANDOMITEMS_UPDATE_METHOD = int(__addon__.getSetting("randomitems_method"))
-    #self.RECENTITEMS_HOME_UPDATE = __addon__.getSetting("recentitems_homeupdate")
-    #self.INPROGRESSITEMS_HOME_UPDATE = __addon__.getSetting("inprogressitems_homeupdate")
-    pass
+    log('Reading properties')
+    self.script_player_starts = __addon__.getSetting("player_starts")
+    self.script_player_stops = __addon__.getSetting("player_stops")
+    self.script_screensaver_starts = __addon__.getSetting("screensaver_starts")
+    self.script_screensaver_stops = __addon__.getSetting("screensaver_stops")
+    #self.script_xbmc_starts = __addon__.getSetting("xbmc_starts")
+    #self.script_xbmc_stops = __addon__.getSetting("xbmc_stops")
+    log('script player starts = "' + self.script_player_starts + '"')
+    log('script player stops = "' + self.script_player_stops + '"')
+    log('script screensaver starts = "' + self.script_screensaver_starts + '"')
+    log('script screensaver stops = "' + self.script_screensaver_stops + '"')
 
   def _daemon(self):
     while (not xbmc.abortRequested):
       # Do nothing
       xbmc.sleep(600)
+    log('abort requested')
 
 
 class MyMonitor(xbmc.Monitor):
-  def __init__(self):
+  def __init__(self, *args, **kwargs):
     xbmc.Monitor.__init__(self)
+    self.update_settings = kwargs['update_settings']
     log('init monitor')
+
+  def onSettingsChanged(self):
+    self.update_settings()
 
   def onScreensaverActivated(self):
     log('callback: monitor screensaver Activated')
