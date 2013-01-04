@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<settings>
+    <category label="32000">
+      <setting label="32010" type="fileenum" id="playback_starts"/>
+      <setting label="32011" type="fileenum" id="playback_stops"/>
+      <setting label="32012" type="fileenum" id="screensaver_starts"/>
+      <setting label="32013" type="fileenum" id="screensaver_stops"/>
+    </category>
+</settings>
