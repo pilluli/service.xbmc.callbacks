@@ -112,7 +112,7 @@ class MyPlayer(xbmc.Player):
     self.substrings = [ '-trailer', 'http://' ]
 
   def playing_status(self):
-    if xbmc.Player.isPlayingAudio() or xbmc.Player.isPlayingVideo():
+    if self.isPlaying():
       return 'status=playing' + ';' + self.playing_type()
     else:
       return 'status=stopped'
