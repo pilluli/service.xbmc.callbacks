@@ -105,7 +105,7 @@ class MyMonitor(xbmc.Monitor):
     global script_screensaver_stops
     if script_screensaver_stops:
       log('Going to execute script = "' + script_screensaver_stops + '"')
-      subprocess.Popen([script_screensaver_stops,self.get_player_status()])
+      subprocess.Popen([script_screensaver_stops])
 
 class MyPlayer(xbmc.Player):
   def __init__(self):
