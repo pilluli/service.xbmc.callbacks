@@ -74,7 +74,7 @@ class Main:
     log('script screensaver stops = "' + script_screensaver_stops + '"')
 
   def _player_status(self):
-    ret = self.Player.player_status()
+    ret = self.Player.playing_status()
     return ret
 
   def _daemon(self):
@@ -114,7 +114,7 @@ class MyPlayer(xbmc.Player):
 
   def playing_status(self):
     if xbmc.Player.isPlaying():
-      return 'status=playing'
+      return 'status=playing' + ';' + self.playing_type()
     else:
       return 'status=stopped'
 
