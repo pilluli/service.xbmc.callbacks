@@ -53,7 +53,7 @@ class Main:
 
   def _init_vars(self):
     self.Player = MyPlayer()
-    self.Monitor = MyMonitor(update_settings = self._init_property)
+    self.Monitor = MyMonitor(update_settings = self._init_property, player_status = self._player_status)
 
   def _init_property(self):
     log('Reading properties')
@@ -73,6 +73,10 @@ class Main:
     log('script screensaver starts = "' + script_screensaver_starts + '"')
     log('script screensaver stops = "' + script_screensaver_stops + '"')
 
+  def _player_status(self):
+    ret = self.Player.player_status()
+    return ret
+
   def _daemon(self):
     while (not xbmc.abortRequested):
       # Do nothing
@@ -83,6 +87,7 @@ class Main:
 class MyMonitor(xbmc.Monitor):
   def __init__(self, *args, **kwargs):
     xbmc.Monitor.__init__(self)
+    self.get_player_status = kwargs['player_status']
     self.update_settings = kwargs['update_settings']
 
   def onSettingsChanged(self):
@@ -93,25 +98,57 @@ class MyMonitor(xbmc.Monitor):
     global script_screensaver_starts
     if script_screensaver_starts:
       log('Going to execute script = "' + script_screensaver_starts + '"')
-      subprocess.Popen([script_screensaver_starts])
+      subprocess.Popen([script_screensaver_starts,self.get_player_status()])
 
   def onScreensaverDeactivated(self):
     log('screensaver stops')
     global script_screensaver_stops
     if script_screensaver_stops:
       log('Going to execute script = "' + script_screensaver_stops + '"')
-      subprocess.Popen([script_screensaver_stops])
+      subprocess.Popen([script_screensaver_stops,self.get_player_status()])
 
 class MyPlayer(xbmc.Player):
   def __init__(self):
     xbmc.Player.__init__(self)
+    self.substrings = [ '-trailer', 'http://' ]
+
+  def playing_status(self):
+    if xbmc.Player.isPlaying():
+      return 'status=playing'
+    else:
+      return 'status=stopped'
+
+  def playing_type(self):
+    type = 'unkown'
+    if (self.isPlayingAudio()):
+      type = "music"  
+    else:
+      if xbmc.getCondVisibility('VideoPlayer.Content(movies)'):
+        filename = ''
+        isMovie = True
+        try:
+          filename = self.getPlayingFile()
+        except:
+          pass
+        if filename != '':
+          for string in self.substrings:
+            if string in filename:
+              isMovie = False
+              break
+        if isMovie:
+          type = "movie"
+      elif xbmc.getCondVisibility('VideoPlayer.Content(episodes)'):
+        # Check for tv show title and season to make sure it's really an episode
+        if xbmc.getInfoLabel('VideoPlayer.Season') != "" and xbmc.getInfoLabel('VideoPlayer.TVShowTitle') != "":
+           type = "episode"
+    return 'type=' + type
 
   def onPlayBackStarted(self):
     log('player starts')
     global script_player_starts
     if script_player_starts:
       log('Going to execute script = "' + script_player_starts + '"')
-      subprocess.Popen([script_player_starts])
+      subprocess.Popen([script_player_starts,self.playing_type()])
 
   def onPlayBackEnded(self):
     self.onPlayBackStopped()
@@ -121,7 +158,7 @@ class MyPlayer(xbmc.Player):
     global script_player_stops
     if script_player_stops:
       log('Going to execute script = "' + script_player_stops + '"')
-      subprocess.Popen([script_player_stops])
+      subprocess.Popen([script_player_stops,self.playing_type()])
 
 if (__name__ == "__main__"):
     log('script version %s started' % __addonversion__)
