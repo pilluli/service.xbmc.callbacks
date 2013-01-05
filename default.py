@@ -74,8 +74,7 @@ class Main:
     log('script screensaver stops = "' + script_screensaver_stops + '"')
 
   def _player_status(self):
-    ret = self.Player.playing_status()
-    return ret
+    return self.Player.playing_status()
 
   def _daemon(self):
     while (not xbmc.abortRequested):
@@ -113,7 +112,7 @@ class MyPlayer(xbmc.Player):
     self.substrings = [ '-trailer', 'http://' ]
 
   def playing_status(self):
-    if xbmc.Player.isPlaying():
+    if xbmc.Player.isPlayingAudio() or xbmc.Player.isPlayingVideo():
       return 'status=playing' + ';' + self.playing_type()
     else:
       return 'status=stopped'
