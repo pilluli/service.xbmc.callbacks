@@ -29,6 +29,8 @@ import subprocess
 script_xbmc_starts = ''
 script_player_starts = ''
 script_player_stops = ''
+script_player_pauses = ''
+script_player_resumes = ''
 script_screensaver_starts = ''
 script_screensaver_stops = ''
 
@@ -60,16 +62,22 @@ class Main:
     global script_xbmc_starts
     global script_player_starts
     global script_player_stops
+    global script_player_pauses
+    global script_player_resumes
     global script_screensaver_starts
     global script_screensaver_stops
     script_xbmc_starts = xbmc.translatePath(__addon__.getSetting("xbmc_starts"))
     script_player_starts = xbmc.translatePath(__addon__.getSetting("player_starts"))
     script_player_stops = xbmc.translatePath(__addon__.getSetting("player_stops"))
+    script_player_pauses = xbmc.translatePath(__addon__.getSetting("player_pauses"))
+    script_player_resumes = xbmc.translatePath(__addon__.getSetting("player_resumes"))
     script_screensaver_starts = xbmc.translatePath(__addon__.getSetting("screensaver_starts"))
     script_screensaver_stops = xbmc.translatePath(__addon__.getSetting("screensaver_stops"))
     log('script xbmc starts = "' + script_xbmc_starts + '"')
     log('script player starts = "' + script_player_starts + '"')
     log('script player stops = "' + script_player_stops + '"')
+    log('script player pauses = "' + script_player_pauses + '"')
+    log('script player resumes = "' + script_player_resumes + '"')
     log('script screensaver starts = "' + script_screensaver_starts + '"')
     log('script screensaver stops = "' + script_screensaver_stops + '"')
 
@@ -158,6 +166,20 @@ class MyPlayer(xbmc.Player):
     if script_player_stops:
       log('Going to execute script = "' + script_player_stops + '"')
       subprocess.Popen([script_player_stops,self.playing_type()])
+
+  def onPlayBackPaused(self):
+    log('player pauses')
+    global script_player_pauses
+    if script_player_pauses:
+      log('Going to execute script = "' + script_player_pauses + '"')
+      subprocess.Popen([script_player_pauses,self.playing_type()])
+
+  def onPlayBackResumed(self):
+    log('player resumes')
+    global script_player_resumes
+    if script_player_resumes:
+      log('Going to execute script = "' + script_player_resumes + '"')
+      subprocess.Popen([script_player_resumes,self.playing_type()])
 
 if (__name__ == "__main__"):
     log('script version %s started' % __addonversion__)

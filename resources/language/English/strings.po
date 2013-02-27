@@ -38,10 +38,18 @@ msgid "Player stops"
 msgstr ""
 
 msgctxt "#32014"
-msgid "Screensaver starts"
+msgid "Player pauses"
 msgstr ""
 
 msgctxt "#32015"
+msgid "Player resumes"
+msgstr ""
+
+msgctxt "#32016"
+msgid "Screensaver starts"
+msgstr ""
+
+msgctxt "#32017"
 msgid "Screensaver stops"
 msgstr ""
 
