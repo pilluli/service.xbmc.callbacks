@@ -8,5 +8,7 @@
       <setting label="32015" type="executable" id="player_resumes"/>
       <setting label="32016" type="executable" id="screensaver_starts"/>
       <setting label="32017" type="executable" id="screensaver_stops"/>
+      <setting label="32018" type="executable" id="xbmc_idle"/>
+      <setting label="32019" type="slider" id="idle_time" default="10" range="1,1,60" option="int" />
     </category>
 </settings>

@@ -53,3 +53,10 @@ msgctxt "#32017"
 msgid "Screensaver stops"
 msgstr ""
 
+msgctxt "#32018"
+msgid "XBMC is idle"
+msgstr ""
+
+msgctxt "#32019"
+msgid "Idle time (minutes)"
+msgstr ""

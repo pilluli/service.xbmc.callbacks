@@ -33,6 +33,7 @@ script_player_pauses = ''
 script_player_resumes = ''
 script_screensaver_starts = ''
 script_screensaver_stops = ''
+script_idle = ''
 
 __addon__        = xbmcaddon.Addon()
 __addonversion__ = __addon__.getAddonInfo('version')
@@ -73,6 +74,7 @@ class Main:
     script_player_resumes = xbmc.translatePath(__addon__.getSetting("player_resumes"))
     script_screensaver_starts = xbmc.translatePath(__addon__.getSetting("screensaver_starts"))
     script_screensaver_stops = xbmc.translatePath(__addon__.getSetting("screensaver_stops"))
+    script_idle = xbmc.translatePath(__addon__.getSetting("xbmc_idle"))
     log('script xbmc starts = "' + script_xbmc_starts + '"')
     log('script player starts = "' + script_player_starts + '"')
     log('script player stops = "' + script_player_stops + '"')
@@ -80,6 +82,7 @@ class Main:
     log('script player resumes = "' + script_player_resumes + '"')
     log('script screensaver starts = "' + script_screensaver_starts + '"')
     log('script screensaver stops = "' + script_screensaver_stops + '"')
+    log('script idle = "' + script_idle + '"')
 
   def _player_status(self):
     return self.Player.playing_status()
@@ -87,7 +90,13 @@ class Main:
   def _daemon(self):
     while (not xbmc.abortRequested):
       # Do nothing
-      xbmc.sleep(600)
+      global script_idle
+      if script_idle:
+        if xbmc.getGlobalIdleTime() > 60 * __addon__.getSetting("idle_time"):
+          log('XBMC is idle')
+          log('Going to execute script = "' + script_idle + '"')
+          subprocess.Popen([script_idle])
+      xbmc.sleep(10000)
     log('abort requested')
 
 
