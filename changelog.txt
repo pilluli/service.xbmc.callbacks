@@ -1,3 +1,6 @@
+v0.3
+- Added try-except catches to try to recover from script errors
+
 v0.2
 - Added pause / resume callbacks
 
