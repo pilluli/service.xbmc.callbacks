@@ -60,3 +60,7 @@ msgstr ""
 msgctxt "#32019"
 msgid "Idle time (minutes)"
 msgstr ""
+
+msgctxt "#32020"
+msgid "Database updated"
+msgstr ""

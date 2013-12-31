@@ -10,5 +10,6 @@
       <setting label="32017" type="executable" id="screensaver_stops"/>
       <setting label="32018" type="executable" id="xbmc_idle"/>
       <setting label="32019" type="slider" id="idle_time" default="10" range="1,1,60" option="int" />
+      <setting label="32020" type="executable" id="db_update"/>
     </category>
 </settings>

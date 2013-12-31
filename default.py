@@ -34,6 +34,7 @@ script_player_resumes = ''
 script_screensaver_starts = ''
 script_screensaver_stops = ''
 script_idle = ''
+script_db_update = ''
 
 __addon__        = xbmcaddon.Addon()
 __addonversion__ = __addon__.getAddonInfo('version')
@@ -70,6 +71,8 @@ class Main:
     global script_player_resumes
     global script_screensaver_starts
     global script_screensaver_stops
+    global script_idle
+    global script_db_update
     script_xbmc_starts = xbmc.translatePath(__addon__.getSetting("xbmc_starts"))
     script_player_starts = xbmc.translatePath(__addon__.getSetting("player_starts"))
     script_player_stops = xbmc.translatePath(__addon__.getSetting("player_stops"))
@@ -78,6 +81,7 @@ class Main:
     script_screensaver_starts = xbmc.translatePath(__addon__.getSetting("screensaver_starts"))
     script_screensaver_stops = xbmc.translatePath(__addon__.getSetting("screensaver_stops"))
     script_idle = xbmc.translatePath(__addon__.getSetting("xbmc_idle"))
+    script_db_update = xbmc.translatePath(__addon__.getSetting("db_update"))
     log('script xbmc starts = "' + script_xbmc_starts + '"')
     log('script player starts = "' + script_player_starts + '"')
     log('script player stops = "' + script_player_stops + '"')
@@ -86,6 +90,7 @@ class Main:
     log('script screensaver starts = "' + script_screensaver_starts + '"')
     log('script screensaver stops = "' + script_screensaver_stops + '"')
     log('script idle = "' + script_idle + '"')
+    log('db update = "' + script_db_update + '"')
 
   def _player_status(self):
     return self.Player.playing_status()
@@ -135,6 +140,16 @@ class MyMonitor(xbmc.Monitor):
       except:
           log('ERROR executing script when screensaver stops')
 
+  def onDatabaseUpdated(self,db):
+    log('database updated')
+    global script_db_update
+    if script_db_update:
+      log('Going to execute script = "' + script_db_update + '"')
+      try:
+          subprocess.Popen([script_db_update,db])
+      except:
+          log('ERROR executing script when database updates')
+
 class MyPlayer(xbmc.Player):
   def __init__(self):
     xbmc.Player.__init__(self)
@@ -177,7 +192,7 @@ class MyPlayer(xbmc.Player):
           filename = self.getPlayingFile()
       except:
           pass
-    return 'filename=' + filename
+      return 'filename=' + filename
 
   def onPlayBackStarted(self):
     log('player starts')
