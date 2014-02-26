@@ -53,7 +53,7 @@ class Main:
     if script_xbmc_starts:
       log('Going to execute script = "' + script_xbmc_starts + '"')
       try:
-          subprocess.Popen([script_xbmc_starts])
+          subprocess.call(script_xbmc_starts)
       except:
           log('Error executing script when xbmc starts')
     self._daemon()
@@ -104,7 +104,7 @@ class Main:
           log('XBMC is idle')
           log('Going to execute script = "' + script_idle + '"')
           try:
-              subprocess.Popen([script_idle])
+              subprocess.call(script_idle)
           except:
               log('ERROR executing script when xbmc goes idle')
       xbmc.sleep(10000)
@@ -126,7 +126,7 @@ class MyMonitor(xbmc.Monitor):
     if script_screensaver_starts:
       log('Going to execute script = "' + script_screensaver_starts + '"')
       try:
-          subprocess.Popen([script_screensaver_starts,self.get_player_status()])
+          subprocess.call([script_screensaver_starts,self.get_player_status()])
       except:
           log('ERROR executing script when screensaver starts')
 
@@ -136,7 +136,7 @@ class MyMonitor(xbmc.Monitor):
     if script_screensaver_stops:
       log('Going to execute script = "' + script_screensaver_stops + '"')
       try:
-          subprocess.Popen([script_screensaver_stops])
+          subprocess.call(script_screensaver_stops)
       except:
           log('ERROR executing script when screensaver stops')
 
@@ -146,7 +146,7 @@ class MyMonitor(xbmc.Monitor):
     if script_db_update:
       log('Going to execute script = "' + script_db_update + '"')
       try:
-          subprocess.Popen([script_db_update,db])
+          subprocess.call([script_db_update,db])
       except:
           log('ERROR executing script when database updates')
 
@@ -200,7 +200,7 @@ class MyPlayer(xbmc.Player):
     if script_player_starts:
       log('Going to execute script = "' + script_player_starts + '"')
       try:
-          subprocess.Popen([script_player_starts,self.playing_type()])
+          subprocess.call([script_player_starts,self.playing_type()])
       except:
           log('ERROR executing script when player starts')
 
@@ -213,7 +213,7 @@ class MyPlayer(xbmc.Player):
     if script_player_stops:
       log('Going to execute script = "' + script_player_stops + '"')
       try:
-          subprocess.Popen([script_player_stops,self.playing_type()])
+          subprocess.call([script_player_stops,self.playing_type()])
       except:
           log('ERROR executing script when player stops')
 
@@ -223,7 +223,7 @@ class MyPlayer(xbmc.Player):
     if script_player_pauses:
       log('Going to execute script = "' + script_player_pauses + '"')
       try:
-          subprocess.Popen([script_player_pauses,self.playing_type()])
+          subprocess.call([script_player_pauses,self.playing_type()])
       except:
           log('ERROR executing script when player pauses')
 
@@ -233,7 +233,7 @@ class MyPlayer(xbmc.Player):
     if script_player_resumes:
       log('Going to execute script = "' + script_player_resumes + '"')
       try:
-          subprocess.Popen([script_player_resumes,self.playing_type()])
+          subprocess.call([script_player_resumes,self.playing_type()])
       except:
           log('ERROR executing script when player resumes')
 
