@@ -107,7 +107,7 @@ class Main:
               subprocess.call(script_idle)
           except:
               log('ERROR executing script when xbmc goes idle')
-      xbmc.sleep(10000)
+      xbmc.sleep(4000)
     log('abort requested')
 
 
@@ -149,6 +149,11 @@ class MyMonitor(xbmc.Monitor):
           subprocess.call([script_db_update,db])
       except:
           log('ERROR executing script when database updates')
+
+  def onAbortRequested(self):
+    # Circular references don't get collected by the garbage collector, causing memory leaks
+    self.get_player_status = None
+    self.update_settings = None
 
 class MyPlayer(xbmc.Player):
   def __init__(self):
@@ -240,7 +245,4 @@ class MyPlayer(xbmc.Player):
 if (__name__ == "__main__"):
     log('script version %s started' % __addonversion__)
     Main()
-    del MyPlayer
-    del MyMonitor
-    del Main
     log('script version %s stopped' % __addonversion__)
